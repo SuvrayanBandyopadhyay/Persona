@@ -1,38 +1,37 @@
+from ollama import Client
 import streamlit as st
-from langchain_ollama import ChatOllama
 
-llm = ChatOllama(
-    model = "llama3.1",
-    temperature = 0.1
-)
+client = Client(host='http://localhost:11434')
 
+def handle_prompt(prompt):
+    # Add user message to history
+    st.chat_message('user').markdown(prompt)
+    st.session_state.messages.append({'role': 'user', 'content': prompt})
 
+    # Generate and stream response
+    with st.chat_message('assistant'):
+        response_placeholder = st.empty()
+        full_response = ''
 
-def genereate_response(prompt,history):
-    messages = [
-        (
-            "system",
-            "You are a therapeutic bot who wants to know more about the patient's mental state. "
-            "If you believe that the student needs help tell him/her to contact the college counselor (9855522123)"
-            "Be as freindly as possible"
-        ),  
-      
+        history = '\n'.join(
+            f'{msg["role"].title()}: {msg["content"]}'
+            for msg in st.session_state.messages
+        )
         
-    ]
-    #Add chat history
-    messages.extend(history)
-    #Add current prompt
-    messages.append(("user",prompt))
+        for chunk in client.generate(
+            # suvraryan pls dont change to 3.1; i dont have enough ram to run it
+            model='llama3.2',
+            prompt=history + '\nassistant: ',
+            stream=True,
+            options={'temperature': 0.5}
+        ):
+            token = chunk.get('response', '')
+            full_response += token
+            response_placeholder.markdown(full_response + '▌') # Typing indicator
 
-    msg = llm.invoke(messages)
-    return msg.content
+        response_placeholder.markdown(full_response)
 
-#A function to add a prompt
-def add_prompt(prompt):
-    #Display user message in chat message container
-    st.chat_message("user").markdown(prompt)
-    #Add it to the chat 
-    st.session_state.messages.append({"role":"user","content":prompt})
-    st.session_state.processing = True
-    #Rerun so that all the variables are set
+    st.session_state.messages.append({'role': 'assistant', 'content': full_response})
+
+    st.session_state.state = 'chat'
     st.rerun()
