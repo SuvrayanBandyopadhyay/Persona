@@ -38,8 +38,10 @@ def is_extreme(content:str):
     sub1 = "However, I can summarize"
     sub2 = "National Suicide Prevention Lifeline (1-800-273-TALK (8255) in the US)"
     sub3 = "Is there anything else I can help you with?"
+    sub4 = "suicide"
+    sub5 = "suicidal"
 
-    if(sub1.lower() in content.lower() or sub2.lower() in content.lower() or sub3.lower() in content.lower()):
+    if(sub1.lower() in content.lower() or sub2.lower() in content.lower() or sub3.lower() in content.lower() or sub4.lower() in content.lower() or sub5.lower() in content.lower()):
         return True
     else:
         return False

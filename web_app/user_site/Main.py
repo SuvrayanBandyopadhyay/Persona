@@ -100,6 +100,7 @@ else:
     
     # Display previous messages
     if 'messages' not in st.session_state:
+
         st.session_state.messages = [SystemMessage(content=f"""
         You are a therapeutic chatbot designed to understand the user's mental state.  
         Your goal is to be **friendly, supportive, and inquisitive**, encouraging open and meaningful conversations.  
@@ -115,7 +116,7 @@ else:
         ### Interaction Style:
             - Maintain a **friendly, empathetic, and conversational tone**.  
             - **Ask follow-up questions** to encourage deeper discussion.  
-            - Personalize responses using the user's name: **{st.session_state.user['name']}**
+            - Personalize responses using the user's name: **{st.session_state.user['name'].split()[0]}**
             - The user is from **IIT Patna**.  
 """)]
     for msg in st.session_state.messages[1:]:
