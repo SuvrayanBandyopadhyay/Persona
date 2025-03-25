@@ -43,11 +43,14 @@ def get_new_profile(old_profile, messages):
     {messages_str}
     """
     
-    return llm.predict(prompt).split("\n")
-
+    return [line for line in llm.invoke(prompt).content.split("\n") if line.strip()]
 
 def update_profile(uID):
-    message_dicts = get_unprofiled_messages(1, 5, 10)
+    message_dicts = get_unprofiled_messages(uID, 5, 10)
+    if not message_dicts:
+        print("Skipping")
+        return
+
     messages = [message_dict["content"] for message_dict in message_dicts]
     
 
@@ -61,11 +64,8 @@ def update_profile(uID):
     
     try:
         # May not exist
-        old_data = persistent_client.get_collection(
-            name=f"user_{uID}",
-            metadata={"hnsw:space": "cosine"},
-        ).get(include=["embeddings", "metadatas", "documents"])
-        
+        old_data = persistent_client.get_collection(f"user_{uID}").get(include=["embeddings", "metadatas", "documents"])
+
         old_profile = old_data["documents"]
         
         combined_collection.add(
@@ -75,8 +75,12 @@ def update_profile(uID):
         )
     except:
         pass
+        
+    print(f"old_profile: {len(old_profile)}")
+    print(f"messages:    {len(messages)}")
 
     new_profile = get_new_profile(old_profile, messages)
+    print(f"new_profile: {len(messages)}")
     
     combined_collection.add(
         ids=[str(uuid4()) for _ in messages],
@@ -118,3 +122,13 @@ def update_profile(uID):
     for message_dict in message_dicts:
         cur.execute("update messages set profiled=1 where mID=%s", [message_dict["mID"]])
     conn.commit()
+ 
+
+
+if __name__ == "__main__":
+    cur.execute("select uID from users")
+    results = cur.fetchall()
+    for i, uID_dict in enumerate(results):
+        print(f"[{i + 1} / {len(results)}]")
+        update_profile(uID_dict["uID"])
+        print()

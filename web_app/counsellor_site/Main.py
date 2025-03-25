@@ -21,12 +21,55 @@ client = PersistentClient(
     path="../../backend/chroma"
 )
 
+def get_ordinal_suffix(day):
+    if 10 <= day % 100 <= 20:
+        suffix = 'th'
+    else:
+        suffix = {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th')
+    return suffix
+
+def format_date(date: datetime):
+    day = date.day
+    suffix = get_ordinal_suffix(day)
+    return date.strftime(f'%d{suffix} %B, %Y')
+
 # Configure page
 st.set_page_config(
     page_title='Persona',
     layout='centered',
     page_icon='🌿',
 )
+
+st.markdown("""
+<style>
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 250px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -125px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+</style>
+""", unsafe_allow_html=True)
 
 
 
@@ -50,8 +93,6 @@ st.title('🌿 Persona Counsellor Dashboard')
 
 
 
-
-
 # Sidebar with information
 with st.sidebar:
     st.title('🌿 Persona')
@@ -71,7 +112,7 @@ with st.sidebar:
 
     options = []
     for row in rows:
-        options.append(str(row[0])+" : "+row[1])
+        options.append(f"{row[0]}. {row[1]}")
 
     st.markdown(
         '''## Choose a profile'''
@@ -97,6 +138,7 @@ with st.sidebar:
         st.rerun()
 
 
+
 #Get overviewdata
 query = "SELECT sentiment,count(sentiment) from users,usercon,conmess,messages where users.uID = usercon.uID and usercon.cID = conmess.cID and conmess.mID = messages.mID and users.uID = %s group by sentiment"
 values = [st.session_state.uID]
@@ -112,18 +154,43 @@ for row in rows:
         y.append(row[1])
 
 #The actual information
-st.header(f"_{st.session_state.name.title()}_")
-
-#Summary
-st.subheader("📝 Summary")
-try:
-    profile = client.get_collection(f"user_{st.session_state.uID}").get()
-    st.markdown("\n\n".join(profile["documents"]))
-except:
-    st.markdown("_User not yet profiled_")
+st.divider()
+st.header(f"👥 {st.session_state.name.title()}")
 st.divider()
 
-st.subheader("🥧 Mental State Map")
+#Summary
+st.subheader("📝 _Summary_")
+try:
+    profile = client.get_collection(f"user_{st.session_state.uID}").get()
+    mID_to_citation_index = {}
+
+    for line, metadata in zip(profile["documents"], profile["metadatas"]):
+        mID = metadata["mID"]
+        
+        if mID not in mID_to_citation_index.keys():
+            mID_to_citation_index[mID] = len(mID_to_citation_index) + 1
+
+        cursor.execute("select time, content from messages where mID=%s", [mID])
+        time, content = cursor.fetchone()
+
+        st.markdown(
+            f"""
+            <div style="display: inline;">
+                {line.strip()} 
+                <div class="tooltip">
+                  <sup>[{mID_to_citation_index[mID]}]</sup>
+                  <span class="tooltiptext"><i>{format_date(time)}<br>"{content}"</i></span>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+except Exception as e:
+    st.markdown("_User not yet profiled_")
+
+st.divider()
+
+st.subheader("🥧 _Mental State Map_")
 #Display
 fig, ax = plt.subplots()
 ax.pie(y,labels=None,autopct='%1.0f%%',pctdistance=1.2)
@@ -132,7 +199,7 @@ st.pyplot(fig)
 st.divider()
 
 #Trends
-st.subheader("📉 Psychological Trends")
+st.subheader("📉 _Psychological Trends_")
 
 #Get unique sentiments
 query = "SELECT DISTINCT(SENTIMENT) FROM users,usercon,conmess,messages where users.uID = usercon.uID and usercon.cID = conmess.cID and conmess.mID = messages.mID and users.uID = %s"
@@ -160,7 +227,6 @@ if st.checkbox("📈 Linear (May be more accurate)"):
     option = 1
 else:
     option = 0
-
 
 if(option != st.session_state.linear):
     st.session_state.linear = option
