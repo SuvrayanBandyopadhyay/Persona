@@ -43,9 +43,9 @@ def sign_up_ui():
                 cursor = conn.cursor(dictionary=True)
                 cursor.execute("""
                     INSERT INTO users (email, passHash, name)
-                    VALUES (%s, %s, %s, %s)
+                    VALUES (%s, %s, %s)
                 """, (email, passHash, name))
-                cursor.execute(f"SELECT * FROM users WHERE uID = {cursor.lastrowid}")
+                cursor.execute(f"SELECT * FROM users WHERE uID={cursor.lastrowid}")
                 result = cursor.fetchone()
                 conn.commit()
 
@@ -78,7 +78,7 @@ def sign_in_ui():
                 cursor = conn.cursor(dictionary=True)
                 cursor.execute("""
                     SELECT * FROM users 
-                    WHERE email = %s
+                    WHERE email=%s
                 """, (email,))
                 
                 result = cursor.fetchone()

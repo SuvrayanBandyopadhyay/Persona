@@ -108,26 +108,22 @@ for row in rows:
 
 #The actual information
 st.header(str(st.session_state.name).title())
-st.divider()
 
 #Summary
 st.subheader("Summary")
-st.divider()
 #Put summary down here
+st.divider()
 
 st.subheader("Mental State Map")
-st.divider()
 #Display
 fig, ax = plt.subplots()
 ax.pie(y,labels=None,autopct='%1.0f%%',pctdistance=1.2)
 ax.legend(x, loc="upper left", bbox_to_anchor=(1, 1))  # Move legend outside
-
 st.pyplot(fig)
+st.divider()
 
 #Trends
 st.subheader("Psychological Trends")
-st.divider()
-
 
 #Get unique sentiments
 query = "SELECT DISTINCT(SENTIMENT) FROM users,usercon,conmess,messages where users.uID = usercon.uID and usercon.cID = conmess.cID and conmess.mID = messages.mID and users.uID = %s"

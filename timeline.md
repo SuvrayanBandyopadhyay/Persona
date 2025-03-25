@@ -1,7 +1,14 @@
 # stack
-    - profile gen
-    - suicide detection
-    - proper conversations
+    - profile gen (TONIGHT)
+        - messages -> vecror store
+        - retrieve top 5 messages for a give query
+    - suicide detection (TONIGHT)
+    - proper conversations (TOM MORNING)
+
+    - polish
+        - stop gen button (asyncio)
+
+    - demo vids and all that shit
 
 - profile rag
     - profile format

@@ -1,2 +1,3 @@
 venv/
-*secrets.toml
+secrets.toml
+chroma/

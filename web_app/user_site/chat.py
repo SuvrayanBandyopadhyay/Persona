@@ -6,9 +6,9 @@ import asyncio
 import mysql.connector
 
 #Ollama
-llm = ChatOllama(model="hf.co/victunes/TherapyBeagle-11B-v2-GGUF:Q2_K",temperature=0.1)
+#llm = ChatOllama(model="hf.co/victunes/TherapyBeagle-11B-v2-GGUF:Q2_K",temperature=0.1)
 #ollama run hf.co/victunes/TherapyBeagle-11B-v2-GGUF:Q2_K
-#llm = ChatOllama(model="llama3.2", temperature=0.1, streaming=True)
+llm = ChatOllama(model="llama3.2", temperature=0.1, streaming=True)
 
 
 
