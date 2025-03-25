@@ -86,7 +86,9 @@ Generates **concise summaries** for each user, assisting counselors in the **dia
 ✅ **Psychological Trends & Graphs**  
 Displays **real-time visualizations** of the individual’s **mental health trends**, allowing experts to track psychological patterns.  
 
-### **Dashboard Preview**  
+### **Dashboard Preview** 
+![image](https://github.com/user-attachments/assets/fcc45748-3b7e-4935-8b70-9a35f8623b26)
+
 ![Dashboard Overview](https://github.com/user-attachments/assets/2f9ff38d-8d8b-4ec9-93ad-0f75df25bb21)  
 
 ![Mental Health Trends](https://github.com/user-attachments/assets/0d553b3c-771b-4533-9882-dce273737169)  
