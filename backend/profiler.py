@@ -4,6 +4,7 @@ from langchain_ollama import ChatOllama
 from langchain_huggingface import HuggingFaceEmbeddings
 from chromadb import EphemeralClient, PersistentClient
 from uuid import uuid4
+import sys
 
 conn = mysql.connector.connect(**st.secrets.mysql)
 cur = conn.cursor(dictionary=True)
@@ -126,9 +127,14 @@ def update_profile(uID):
 
 
 if __name__ == "__main__":
-    cur.execute("select uID from users")
-    results = cur.fetchall()
-    for i, uID_dict in enumerate(results):
-        print(f"[{i + 1} / {len(results)}]")
-        update_profile(uID_dict["uID"])
+    if sys.argv[1:]:
+        uIDs = [int(uID_str) for uID_str in sys.argv[1:]]
+    else:
+        cur.execute("select uID from users")
+        results = cur.fetchall()
+        uIDs = [result["uID"] for result in results]
+
+    for i, uID in enumerate(uIDs):
+        print(f"[{i + 1} / {len(uIDs)}]")
+        update_profile(uID)
         print()

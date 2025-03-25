@@ -76,7 +76,6 @@ elif st.session_state.state == 'sign-in':
 else:
     st.title(f"🌿 What's up, {st.session_state.user['name'].split()[0]}?")
     st.text("") # Vertical spacing
-    
  
     if st.session_state.state == 'init':
         buttons = {
