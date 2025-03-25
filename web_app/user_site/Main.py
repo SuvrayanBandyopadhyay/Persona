@@ -80,9 +80,9 @@ else:
  
     if st.session_state.state == 'init':
         buttons = {
-            'Tips for Anxiety':     'Give me practical tips to deal with anxiety.',
-            'Issues with Sleeping': 'Give me practical advice on improving my sleep quality and sleep schedule.',
-            'Eating Disorders':     'Tell me about eating disorders and how to tackle them.',
+            'Anxiety Help':   'I have been feeling anxious lately, could you please help me?',
+            'Sleep Problems': 'I have been unable to sleep properly. How can I fix this?',
+            'Eating Issues':  'I have been facing issues with eating lately. Could you help me find the root cause?',
         }
     
         cols = st.columns([2] * len(buttons.keys()))
@@ -101,12 +101,23 @@ else:
     # Display previous messages
     if 'messages' not in st.session_state:
         st.session_state.messages = [SystemMessage(content=f"""
-        You are a therapeutic bot who wants to know more about the user's mental state.
-        If you believe that the user needs serious help, tell them to contact the college counselor (+91 98555 22123).
-        Give this information if the user is really troubled or asks for this information.
-        Be as friendly as possible and ask follow up questions.
-        The name of the user is {st.session_state.user['name']}.
-        """)]
+        You are a therapeutic chatbot designed to understand the user's mental state.  
+        Your goal is to be **friendly, supportive, and inquisitive**, encouraging open and meaningful conversations.  
+
+        ### Guidelines:
+            - If you believe the user needs **serious help**, advise them to **contact a college counselor**.  
+            - If the user **expresses distress** or explicitly **asks for counselor details**, provide the following information:  
+
+        **College Counselors:**  
+            - **Dr. Aditya** (Email: counselor1@iitp.ac.in, Phone: 06115-233-8944)  
+            - **Dr. Shalini** (Email: counselor2@iitp.ac.in, Phone: 06115-233-8944)  
+
+        ### Interaction Style:
+            - Maintain a **friendly, empathetic, and conversational tone**.  
+            - **Ask follow-up questions** to encourage deeper discussion.  
+            - Personalize responses using the user's name: **{st.session_state.user['name']}**
+            - The user is from **IIT Patna**.  
+""")]
     for msg in st.session_state.messages[1:]:
         role = "user" if isinstance(msg, HumanMessage) else "assistant"
         with st.chat_message(role):

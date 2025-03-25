@@ -4,6 +4,7 @@ import streamlit as st
 from datetime import datetime
 import mysql.connector
 import torch
+import time
 
 
 
@@ -17,13 +18,21 @@ model = AutoModelForSequenceClassification.from_pretrained("tahaenesaslanturk/me
 #Analyze the sentiment
 #Function to check if context suggests a potential mental condition
 def sentiment_present(content:str):
-    prompt = "You will be given a message from a student seeking mental assistance. Reply yes if you think there is a mental or physical issue in the statement. Otherwise reply no. Only reply yes or no. user input:-  "
+    #If content is too short, return false
+    if(len(content.split())<4):
+        return False
+
+
+    prompt = '''Analyze the following message from a student seeking mental assistance.
+    Respond with 'yes' if the message indicates a potential mental or physical health concern.
+    Otherwise, respond with 'no'. Do not provide any additional text. 
+    User input:''' 
     prompt += content
 
     full_response = ""
     response = llm.stream(prompt)
 
-    max_size = 5
+    max_size = 8
     size = 0
     for token in response:
         full_response += token
@@ -70,9 +79,10 @@ def format_prediction(prediction):
             return "loneliness"
         case "ptsd":
             return "PTSD"
+        case "alcoholism":
+            return "emotional"
         case "suicidewatch":
             return "extreme"
-
         case _:
             return prediction
 
@@ -90,6 +100,9 @@ while True:
     query = "SELECT mID,content from messages where ISNULL(sentiment) and role = \"user\""
     cursor.execute(query)
     rows = cursor.fetchall()
+
+    if(len(rows)==0):
+        print("Up to date")
 
     for row in rows:
         mID = row[0]
@@ -114,7 +127,7 @@ while True:
         values = [prediction,mID]
         cursor.execute(query,values)
         connector.commit()
-        
     #Close the connection
     cursor.close()
     connector.close()
+    time.sleep(2)

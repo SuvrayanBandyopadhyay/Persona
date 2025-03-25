@@ -11,7 +11,7 @@ cur = conn.cursor(dictionary=True)
 embedder = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
 
 llm = ChatOllama(
-    model='llama3.2',
+    model="llama3.2",
 )
 
 persistent_client = PersistentClient()

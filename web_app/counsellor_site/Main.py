@@ -33,6 +33,17 @@ def format_date(date: datetime):
     suffix = get_ordinal_suffix(day)
     return date.strftime(f'%d{suffix} %B, %Y')
 
+#Check if text is "extreme"
+def is_extreme(content:str):
+    sub1 = "However, I can summarize"
+    sub2 = "National Suicide Prevention Lifeline (1-800-273-TALK (8255) in the US)"
+    sub3 = "Is there anything else I can help you with?"
+
+    if(sub1.lower() in content.lower() or sub2.lower() in content.lower() or sub3.lower() in content.lower()):
+        return True
+    else:
+        return False
+
 # Configure page
 st.set_page_config(
     page_title='Persona',
@@ -167,25 +178,49 @@ try:
     for line, metadata in zip(profile["documents"], profile["metadatas"]):
         mID = metadata["mID"]
         
+        fresh = False
         if mID not in mID_to_citation_index.keys():
+            fresh = True
             mID_to_citation_index[mID] = len(mID_to_citation_index) + 1
 
         cursor.execute("select time, content from messages where mID=%s", [mID])
         time, content = cursor.fetchone()
 
-        st.markdown(
-            f"""
-            <div style="display: inline;">
-                {line.strip()} 
-                <div class="tooltip">
-                  <sup>[{mID_to_citation_index[mID]}]</sup>
-                  <span class="tooltiptext"><i>{format_date(time)}<br>"{content}"</i></span>
+        extreme = False
+        if(is_extreme(line)):
+            extreme = True
+            line = "• WARNING: User might be suicidal or may be contemplating self harm."
+        
+        if(extreme==False):
+            st.markdown(
+                f"""
+                <div style="display: inline;">
+                    {line.strip()} 
+                    <div class="tooltip">
+                    <sup>[{mID_to_citation_index[mID]}]</sup>
+                    <span class="tooltiptext"><i>{format_date(time)}<br>"{content}"</i></span>
+                    </div>
                 </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        elif fresh:
+            st.markdown(
+            f"""
+            <div style="display: inline; font-weight: bold; color: red;">
+            {line.strip()} 
+            <div class="tooltip">
+            <sup>[{mID_to_citation_index[mID]}]</sup>
+            <span class="tooltiptext" ><i>{format_date(time)}<br>"{content}"</i></span>
+            </div>
             </div>
             """,
             unsafe_allow_html=True,
-        )
+            )
+
+
 except Exception as e:
+    st.markdown(e)
     st.markdown("_User not yet profiled_")
 
 st.divider()
@@ -223,7 +258,7 @@ if(trend!=st.session_state.trend):
 
 option = 0
 #Curve is smooth or not
-if st.checkbox("📈 Linear (May be more accurate)"):
+if st.checkbox("📈 Linear (More Accurate)"):
     option = 1
 else:
     option = 0
@@ -271,17 +306,22 @@ else:
     x_smooth,y_smooth = x,y
 
 
+#If enough data points
+if(len(x)>2):
+    #Draw the plot
+    fig,ax = plt.subplots()
+    ax.plot(x_smooth,y_smooth,color="red")
+    ax.fill_between(x_smooth, y_smooth, alpha=0.3, color='red')
+    #Reduce font size
+    ax.tick_params(axis='x', rotation=45, labelsize=8)  # Decrease font size
+    ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter('%b %d'))  # Format as "Date Day"
 
-#Draw the plot
-fig,ax = plt.subplots()
-ax.plot(x_smooth,y_smooth,color="red")
-ax.fill_between(x_smooth, y_smooth, alpha=0.3, color='red')
-#Reduce font size
-ax.tick_params(axis='x', rotation=45, labelsize=8)  # Decrease font size
-ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter('%b %d'))  # Format as "Date Day"
 
 
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Frequency")
+    st.pyplot(fig)
 
-ax.set_xlabel("Date")
-ax.set_ylabel("Frequency")
-st.pyplot(fig)
+#Else if not enough data
+else:
+    st.caption("Not enough data to display")

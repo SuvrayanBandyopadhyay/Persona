@@ -36,3 +36,11 @@ def sidebar_ui():
         )
             st.session_state.voice = option
             st.markdown("Changes will take effect from the next conversation")
+
+        #Mailto
+        st.markdown(
+        '<a href="mailto:counselor1@iitp.ac.in" style="text-decoration: none; color: black;">'
+        '<i><u>Contact Counsellor</u></i>'
+        '</a>',
+        unsafe_allow_html=True
+        )
