@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.interpolate import make_interp_spline
+from chromadb import PersistentClient
 
 #The connector
 connector = mysql.connector.connect(
@@ -15,6 +16,10 @@ connector = mysql.connector.connect(
     database="persona"
     )
 cursor = connector.cursor()
+
+client = PersistentClient(
+    path="../../backend/chroma"
+)
 
 # Configure page
 st.set_page_config(
@@ -107,14 +112,18 @@ for row in rows:
         y.append(row[1])
 
 #The actual information
-st.header(str(st.session_state.name).title())
+st.header(f"_{st.session_state.name.title()}_")
 
 #Summary
-st.subheader("Summary")
-#Put summary down here
+st.subheader("📝 Summary")
+try:
+    profile = client.get_collection(f"user_{st.session_state.uID}").get()
+    st.markdown("\n\n".join(profile["documents"]))
+except:
+    st.markdown("_User not yet profiled_")
 st.divider()
 
-st.subheader("Mental State Map")
+st.subheader("🥧 Mental State Map")
 #Display
 fig, ax = plt.subplots()
 ax.pie(y,labels=None,autopct='%1.0f%%',pctdistance=1.2)
@@ -123,7 +132,7 @@ st.pyplot(fig)
 st.divider()
 
 #Trends
-st.subheader("Psychological Trends")
+st.subheader("📉 Psychological Trends")
 
 #Get unique sentiments
 query = "SELECT DISTINCT(SENTIMENT) FROM users,usercon,conmess,messages where users.uID = usercon.uID and usercon.cID = conmess.cID and conmess.mID = messages.mID and users.uID = %s"
