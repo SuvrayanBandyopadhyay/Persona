@@ -5,10 +5,41 @@ from mysql.connector import Error
 import re
 import streamlit as st
 import time
+from langchain_core.messages import SystemMessage
 
-def is_email_invalid(email):
-    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    return re.match(pattern, email) is None
+def update_session_state(cursor, user):
+    st.session_state.state = 'init'
+    st.session_state.user = user
+
+    cursor.execute(
+        """SELECT cID, title FROM
+        users NATURAL JOIN usercon NATURAL JOIN conversations
+        WHERE uID=%s
+        ORDER BY lastInteraction DESC""",
+        [st.session_state.user["uID"]],
+    )
+    st.session_state.conversations = cursor.fetchall()
+    st.session_state.cID = None
+
+    st.session_state.messages = [SystemMessage(content=f"""
+    You are a therapeutic chatbot designed to understand the user's mental state.  
+    Your goal is to be **friendly, supportive, and inquisitive**, encouraging open and meaningful conversations.  
+
+    ### Guidelines:
+        - If you believe the user needs **serious help**, advise them to **contact a college counselor**.  
+        - If the user **expresses distress** or explicitly **asks for counselor details**, provide the following information:  
+
+    **College Counselors:**  
+        - **Dr. Aditya** (Email: counselor1@iitp.ac.in, Phone: 06115-233-8944)  
+        - **Dr. Shalini** (Email: counselor2@iitp.ac.in, Phone: 06115-233-8944)  
+
+    ### Interaction Style:
+        - Maintain a **friendly, empathetic, and conversational tone**.  
+        - **Ask follow-up questions** to encourage deeper discussion.  
+        - Personalize responses using the user's name: **{st.session_state.user['name'].split()[0]}**
+        - The user is from **IIT Patna**.  
+    """)]
+
 
 def sign_up_ui():
     st.title('🌿 Sign-Up for Persona')
@@ -24,7 +55,7 @@ def sign_up_ui():
                 st.error("Name field empty")
                 return
 
-            if is_email_invalid(email):
+            if re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email) is None:
                 st.error("Email invalid")
                 return
 
@@ -46,40 +77,10 @@ def sign_up_ui():
                     VALUES (%s, %s, %s)
                 """, (email, passHash, name))
                 cursor.execute(f"SELECT * FROM users WHERE uID={cursor.lastrowid}")
-                result = cursor.fetchone()
+                user = cursor.fetchone()
                 conn.commit()
 
-                st.session_state.state = 'init'
-                st.session_state.user = result
-
-
-
-                # overcomplicated since conversations has auto_increment and default current_timestamp()
-                query = "SELECT MAX(cID) from conversations"
-                cursor.execute(query)
-                num = 1
-
-                result = cursor.fetchone()
-        
-                if(result is None):
-                    num = 1 
-                else:
-                    num =result["MAX(cID)"]+1
-
-                st.session_state.conversationID = num
-
-                query = "INSERT INTO conversations values (%s,CURRENT_TIMESTAMP())"
-                values = [num]
-                cursor.execute(query,values)
-                conn.commit()
-
-                query  = "INSERT INTO usercon values (%s,%s)"
-                values = [st.session_state.user["uID"],st.session_state.conversationID]
-                cursor.execute(query,values)
-                conn.commit()
-
-
-
+                update_session_state(cursor, user)
                 st.success("Sign-up successful!")
                 time.sleep(2)
                 st.rerun()
@@ -110,42 +111,12 @@ def sign_in_ui():
                     WHERE email=%s
                 """, (email,))
                 
-                result = cursor.fetchone()
-                if result and hmac.compare_digest(
-                    result['passHash'],
+                user = cursor.fetchone()
+                if user and hmac.compare_digest(
+                    user['passHash'],
                     hashlib.sha256(password.encode()).hexdigest()
                 ):
-                    st.session_state.state = 'init'
-                    st.session_state.user = result
-
-
-
-                    # overcomplicated since conversations has auto_increment and default current_timestamp()
-                    query = "SELECT MAX(cID) from conversations"
-                    cursor.execute(query)
-                    num = 1
-
-                    result = cursor.fetchone()
-        
-                    if(result is None):
-                        num = 1 
-                    else:
-                        num =result["MAX(cID)"]+1
-
-                    st.session_state.conversationID = num
-
-                    query = "INSERT INTO conversations values (%s,CURRENT_TIMESTAMP())"
-                    values = [num]
-                    cursor.execute(query,values)
-                    conn.commit()
-
-                    query  = "INSERT INTO usercon values (%s,%s)"
-                    values = [st.session_state.user["uID"],st.session_state.conversationID]
-                    cursor.execute(query,values)
-                    conn.commit()
-
-
-
+                    update_session_state(cursor, user)
                     st.success("Sign-in successful!")
                     time.sleep(2)
                     st.rerun()

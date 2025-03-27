@@ -53,11 +53,11 @@ st.markdown(
 if 'state' not in st.session_state:
     st.session_state.state = 'sign-in' # 'sign-in' | 'sign-up' | 'init' | 'chat' | 'gen'
 
-#Should we generate sound
+# Should we generate sound
 if "sound" not in st.session_state:
     st.session_state.sound = 1
 
-#Sound of the user
+# Sound of the user
 if "voice" not in st.session_state:
     st.session_state.voice = "en-US-AndrewNeural"
 
@@ -97,34 +97,17 @@ else:
                 st.session_state.callbacks.append(lambda: handle_prompt(prompt))
                 st.rerun()
     
-    # Display previous messages
-    if 'messages' not in st.session_state:
-
-        st.session_state.messages = [SystemMessage(content=f"""
-        You are a therapeutic chatbot designed to understand the user's mental state.  
-        Your goal is to be **friendly, supportive, and inquisitive**, encouraging open and meaningful conversations.  
-
-        ### Guidelines:
-            - If you believe the user needs **serious help**, advise them to **contact a college counselor**.  
-            - If the user **expresses distress** or explicitly **asks for counselor details**, provide the following information:  
-
-        **College Counselors:**  
-            - **Dr. Aditya** (Email: counselor1@iitp.ac.in, Phone: 06115-233-8944)  
-            - **Dr. Shalini** (Email: counselor2@iitp.ac.in, Phone: 06115-233-8944)  
-
-        ### Interaction Style:
-            - Maintain a **friendly, empathetic, and conversational tone**.  
-            - **Ask follow-up questions** to encourage deeper discussion.  
-            - Personalize responses using the user's name: **{st.session_state.user['name'].split()[0]}**
-            - The user is from **IIT Patna**.  
-""")]
     for msg in st.session_state.messages[1:]:
         role = "user" if isinstance(msg, HumanMessage) else "assistant"
         with st.chat_message(role):
             st.markdown(msg.content)
             
     if st.session_state.state == 'chat' and st.session_state.sound == 1:
-        st.audio(f"user-tts/{st.session_state.user['uID']}.mp3", format="audio/mp3")
+        try:
+            # TODO hack for now
+            st.audio(f"user-tts/{st.session_state.user['uID']}.mp3", format="audio/mp3")
+        except:
+            pass
     
     # Chat input
     if prompt := st.chat_input('How are you feeling today?', disabled=(st.session_state.state not in ['init', 'chat'])):
@@ -132,8 +115,5 @@ else:
         st.session_state.callbacks.append(lambda: handle_prompt(prompt))
         st.rerun()
 
-# Useful when actiions require a UI update and then a function call (like a button click)
-if 'callbacks' not in st.session_state:
-    st.session_state.callbacks = []
 while callbacks := st.session_state.callbacks:
     callbacks.pop(0)()
