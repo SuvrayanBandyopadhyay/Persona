@@ -1,6 +1,7 @@
 import streamlit as st
-import mysql.connector
 from langchain_core.messages import AIMessage, HumanMessage
+
+from mysql_wrapper import *
 
 def sidebar_ui():
     with st.sidebar:
@@ -22,38 +23,36 @@ def sidebar_ui():
         
         st.divider()
 
-        # UNFINISHED
-        st.session_state.cID = st.selectbox(
+        new_index = st.selectbox(
             "Chats",
-            range(len(st.session_state.conversations)),
-            index=None,
-            format_func=lambda index: st.session_state.conversations[index]["title"],
-            placeholder="New Chat",
-        )
-        
-        st.session_state.messages = st.session_state.messages[:1]
+            range(len(st.session_state.conversations) + 1),
+            index=st.session_state.conversation_index + 1,
+            format_func=lambda select_index: "New Chat" if not select_index else st.session_state.conversations[select_index - 1]["title"],
+        ) - 1
+        if new_index != st.session_state.conversation_index:
+            st.session_state.conversation_index = new_index
+            st.session_state.messages = st.session_state.messages[:1]
 
-        if st.session_state.cID is None:
-            st.session_state.state = 'init'
-        else:
-            st.session_state.state = 'chat'
-            conn = mysql.connector.connect(**st.secrets.mysql)
-            cursor = conn.cursor()
-            
-            cursor.execute(
-                """SELECT content
-                FROM conversations NATURAL JOIN conmess NATURAL JOIN messages
-                WHERE cID=%s
-                ORDER BY mID""",
-                [st.session_state.cID]
-            )
-            st.session_state.messages += [(AIMessage(content=content) if i % 2 else HumanMessage(content=content)) for i, (content,) in enumerate(cursor.fetchall())]
+            if new_index < 0:
+                st.session_state.state = 'init'
+                st.session_state.cID = None
+            else:
+                st.session_state.state = 'chat'
+                st.session_state.cID = st.session_state.conversations[new_index]["cID"]
 
-            cursor.close()
-            conn.close()
+                cursor.execute(
+                    """SELECT content
+                    FROM conversations NATURAL JOIN conmess NATURAL JOIN messages
+                    WHERE cID=%s
+                    ORDER BY mID""",
+                    [st.session_state.cID]
+                )
+                st.session_state.messages += [(AIMessage(content=content_dict["content"]) if i % 2 else HumanMessage(content=content_dict["content"])) for i, content_dict in enumerate(cursor.fetchall())]
+
+            st.rerun()
 
         st.divider()
-      
+
         if st.checkbox("🔊 Audio", disabled=(st.session_state.state == "gen"),value=True):
             st.session_state.sound = 1
         else:

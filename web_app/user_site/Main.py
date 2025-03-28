@@ -76,39 +76,39 @@ elif st.session_state.state == 'sign-in':
 else:
     st.title(f"🌿 What's up, {st.session_state.user['name'].split()[0]}?")
     st.text("") # Vertical spacing
- 
+
     if st.session_state.state == 'init':
         buttons = {
             'Anxiety Help':   'I have been feeling anxious lately, could you please help me?',
             'Sleep Problems': 'I have been unable to sleep properly. How can I fix this?',
             'Eating Issues':  'I have been facing issues with eating lately. Could you help me find the root cause?',
         }
-    
+
         cols = st.columns([2] * len(buttons.keys()))
         button_rets = []
-        
+
         for col, text in zip(cols, buttons.keys()):
             with col:
                 button_rets.append(st.button(text))
-        
+
         for button_ret, prompt in zip(button_rets, buttons.values()):
             if button_ret:
                 st.session_state.state = 'gen'
                 st.session_state.callbacks.append(lambda: handle_prompt(prompt))
                 st.rerun()
-    
+
     for msg in st.session_state.messages[1:]:
         role = "user" if isinstance(msg, HumanMessage) else "assistant"
         with st.chat_message(role):
             st.markdown(msg.content)
-            
+
     if st.session_state.state == 'chat' and st.session_state.sound == 1:
         try:
-            # TODO hack for now
-            st.audio(f"user-tts/{st.session_state.user['uID']}.mp3", format="audio/mp3")
+            # For legacy DB entries for which audio files don't exist
+            st.audio(f"user-tts/{st.session_state.user['uID']}-{st.session_state.cID}.mp3", format="audio/mp3")
         except:
             pass
-    
+
     # Chat input
     if prompt := st.chat_input('How are you feeling today?', disabled=(st.session_state.state not in ['init', 'chat'])):
         st.session_state.state = 'gen'

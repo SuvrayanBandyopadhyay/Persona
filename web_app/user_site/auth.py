@@ -1,11 +1,11 @@
 import hashlib
 import hmac
-import mysql.connector
-from mysql.connector import Error
 import re
 import streamlit as st
 import time
 from langchain_core.messages import SystemMessage
+
+from mysql_wrapper import *
 
 def update_session_state(cursor, user):
     st.session_state.state = 'init'
@@ -19,6 +19,7 @@ def update_session_state(cursor, user):
         [st.session_state.user["uID"]],
     )
     st.session_state.conversations = cursor.fetchall()
+    st.session_state.conversation_index = -1
     st.session_state.cID = None
 
     st.session_state.messages = [SystemMessage(content=f"""
@@ -69,28 +70,19 @@ def sign_up_ui():
                 
             passHash = hashlib.sha256(password.encode()).hexdigest()
             
-            try:
-                conn = mysql.connector.connect(**st.secrets.mysql)
-                cursor = conn.cursor(dictionary=True)
-                cursor.execute("""
-                    INSERT INTO users (email, passHash, name)
-                    VALUES (%s, %s, %s)
-                """, (email, passHash, name))
-                cursor.execute(f"SELECT * FROM users WHERE uID={cursor.lastrowid}")
-                user = cursor.fetchone()
-                conn.commit()
+            cursor.execute("""
+                INSERT INTO users (email, passHash, name)
+                VALUES (%s, %s, %s)
+            """, (email, passHash, name))
+            cursor.execute(f"SELECT * FROM users WHERE uID={cursor.lastrowid}")
+            user = cursor.fetchone()
+            conn.commit()
 
-                update_session_state(cursor, user)
-                st.success("Sign-up successful!")
-                time.sleep(2)
-                st.rerun()
+            update_session_state(cursor, user)
+            st.success("Sign-up successful!")
+            time.sleep(2)
+            st.rerun()
                 
-            except Error as e:
-                st.error(f"Sign-up failed: {e}")
-            finally:
-                cursor.close()
-                conn.close()
-
     if st.button("Sign-In Instead", type="primary"):
         st.session_state.state = 'sign-in'
         st.rerun()
@@ -103,32 +95,23 @@ def sign_in_ui():
         password = st.text_input("Password", type="password")
         
         if st.form_submit_button("Sign-In"):
-            try:
-                conn = mysql.connector.connect(**st.secrets.mysql)
-                cursor = conn.cursor(dictionary=True)
-                cursor.execute("""
-                    SELECT * FROM users 
-                    WHERE email=%s
-                """, (email,))
-                
-                user = cursor.fetchone()
-                if user and hmac.compare_digest(
-                    user['passHash'],
-                    hashlib.sha256(password.encode()).hexdigest()
-                ):
-                    update_session_state(cursor, user)
-                    st.success("Sign-in successful!")
-                    time.sleep(2)
-                    st.rerun()
-                else:
-                    st.error("Invalid credentials")
+            cursor.execute("""
+                SELECT * FROM users 
+                WHERE email=%s
+            """, (email,))
+            
+            user = cursor.fetchone()
+            if user and hmac.compare_digest(
+                user['passHash'],
+                hashlib.sha256(password.encode()).hexdigest()
+            ):
+                update_session_state(cursor, user)
+                st.success("Sign-in successful!")
+                time.sleep(2)
+                st.rerun()
+            else:
+                st.error("Invalid credentials")
                     
-            except Error as e:
-                st.error(f"Sign-in error: {e}")
-            finally:
-                cursor.close()
-                conn.close()
-
     if st.button("Sign-Up First", type="primary"):
         st.session_state.state = 'sign-up'
         st.rerun()
