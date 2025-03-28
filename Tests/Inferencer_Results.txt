@@ -1,0 +1,168 @@
+1   I had a great day at work and met some new friends., ['normal', '', ''] : normal
+Presence or absence of disorder detected correctly
+Classification matched correctly
+2   Today was just an average day  nothing special., ['normal', '', ''] : normal
+Presence or absence of disorder detected correctly
+Classification matched correctly
+3   I enjoy going for morning walks to start my day fresh., ['normal', '', ''] : normal
+Presence or absence of disorder detected correctly
+Classification matched correctly
+4   Cooking is my favorite way to relax in the evenings., ['normal', '', ''] : normal
+Presence or absence of disorder detected correctly
+Classification matched correctly
+5   I feel guilty every time I eat something unhealthy., ['eating disorder', '', ''] : eating disorder
+Presence or absence of disorder detected correctly
+Classification matched correctly
+6   No matter how much I eat  I never feel satisfied., ['eating disorder', '', ''] : eating disorder
+Presence or absence of disorder detected correctly
+Classification matched correctly
+7   I skip meals on purpose to lose weight., ['eating disorder', '', ''] : eating disorder
+Presence or absence of disorder detected correctly
+Classification matched correctly
+8   Looking in the mirror makes me anxious about my body., ['eating disorder', 'anxiety', ''] : anxiety
+Presence or absence of disorder detected correctly
+Classification matched correctly
+9   I count every calorie obsessively  and it stresses me out., ['eating disorder', 'anxiety', ''] : eating disorder
+Presence or absence of disorder detected correctly
+Classification matched correctly
+10   I tried quitting  but I always go back to smoking., ['addiction', '', ''] : addiction
+Presence or absence of disorder detected correctly
+Classification matched correctly
+11   I feel restless when I don't have access to alcohol., ['addiction', 'anxiety', ''] : adhd
+Presence or absence of disorder detected correctly
+12   Lately  my gambling habit is spiraling out of control., ['addiction', '', ''] : addiction
+Presence or absence of disorder detected correctly
+Classification matched correctly
+13   I cannot focus on anything except when I get my next fix., ['addiction', 'adhd', ''] : emotional
+Presence or absence of disorder detected correctly
+14   Drinking is the only thing that numbs my sadness., ['addiction', 'depression', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+15   I feel like my emotions are always all over the place., ['emotional', '', ''] : bipolar disorder
+Presence or absence of disorder detected correctly
+16   I cry at the smallest things  and I don't know why., ['emotional', 'depression', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+17   I often get angry and regret it later., ['emotional', 'bipolar disorder', ''] : depression
+Presence or absence of disorder detected correctly
+18   Some days I just want to disappear from the world., ['depression', 'emotional', 'loneliness'] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+19   I dont know how to explain what I'm feeling., ['emotional', 'anxiety', ''] : depression
+Presence or absence of disorder detected correctly
+20   I start a task but get distracted and forget about it., ['adhd', '', ''] : emotional
+Presence or absence of disorder detected correctly
+21   I can never seem to sit still  no matter what., ['adhd', '', ''] : depression
+Presence or absence of disorder detected correctly
+22   I overthink every little thing I say to people., ['anxiety', '', ''] : emotional
+Presence or absence of disorder detected correctly
+23   My heart races before every social interaction., ['anxiety', 'autism', ''] : anxiety
+Presence or absence of disorder detected correctly
+Classification matched correctly
+24   I always feel like something bad is going to happen., ['anxiety', 'depression', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+25   Even simple decisions make me feel overwhelmed., ['anxiety', 'adhd', ''] : depression
+Presence or absence of disorder detected correctly
+26   I can't fall asleep because my mind won't stop racing., ['anxiety', 'insomnia', ''] : anxiety
+Presence or absence of disorder detected correctly
+Classification matched correctly
+27   I struggle to understand sarcasm or jokes., ['autism', 'depression', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+28   I prefer routine and dislike sudden changes., ['normal', '', ''] : normal
+Presence or absence of disorder detected correctly
+Classification matched correctly
+29   Social situations leave me completely drained., ['autism', 'anxiety', 'emotional'] : anxiety
+Presence or absence of disorder detected correctly
+Classification matched correctly
+30   I have intense interests that I talk about nonstop., ['autism', 'emotional', ''] : emotional
+Presence or absence of disorder detected correctly
+Classification matched correctly
+31   One moment I feel unstoppable  the next I crash., ['bipolar disorder', 'depression', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+32   I make impulsive decisions when I'm feeling high., ['bipolar disorder', 'adhd', ''] : anxiety
+Presence or absence of disorder detected correctly
+33   Some days I can't get out of bed  other days I don't sleep at all., ['bipolar disorder', 'depression', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+34   I get irritated over the smallest things., ['bipolar disorder', '', ''] : emotional
+Presence or absence of disorder detected correctly
+35   My mood swings make relationships difficult., ['bipolar disorder', 'emotional', ''] : bipolar disorder
+Presence or absence of disorder detected correctly
+Classification matched correctly
+36   I feel empty even when everything is going well., ['depression', '', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+37   Getting out of bed feels impossible some days., ['depression', '', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+38   I don't find joy in things I used to love., ['depression', 'loneliness', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+39   It's hard to care about anything anymore., ['depression', '', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+40   I feel like a burden to everyone around me., ['depression', 'loneliness', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+41   No one would notice if I disappeared., ['loneliness', 'depression', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+42   I feel like I have no real friends., ['loneliness', '', ''] : loneliness
+Presence or absence of disorder detected correctly
+Classification matched correctly
+43   Even in a crowded room, ['i feel alone.', 'loneliness', 'anxiety'] : anxiety
+Presence or absence of disorder detected correctly
+Classification matched correctly
+44   I haven't talked to anyone in days., ['loneliness', 'depression', ''] : loneliness
+Presence or absence of disorder detected correctly
+Classification matched correctly
+45   I wish I had someone to confide in., ['loneliness', '', ''] : loneliness
+Presence or absence of disorder detected correctly
+Classification matched correctly
+46   Loud noises take me right back to that moment., ['ptsd', 'anxiety', ''] : schizophrenia
+Presence or absence of disorder detected correctly
+47   I have nightmares that make me wake up in terror., ['ptsd', '', ''] : anxiety
+Presence or absence of disorder detected correctly
+48   I avoid places that remind me of what happened., ['ptsd', '', ''] : depression
+Presence or absence of disorder detected correctly
+49   My mind replays my trauma when I least expect it., ['ptsd', 'depression', ''] : PTSD
+Presence or absence of disorder detected correctly
+Classification matched correctly
+50   I feel numb and disconnected from everything., ['ptsd', 'depression', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+51   I hear voices that no one else hears., ['schizophrenia', '', ''] : schizophrenia
+Presence or absence of disorder detected correctly
+Classification matched correctly
+52   I see things that others tell me aren't real., ['schizophrenia', '', ''] : depression
+Presence or absence of disorder detected correctly
+53   People are watching me  I can feel it., ['schizophrenia', 'anxiety', ''] : anxiety
+Presence or absence of disorder detected correctly
+Classification matched correctly
+54   My thoughts are being controlled by something else., ['schizophrenia', 'emotional', ''] : emotional
+Presence or absence of disorder detected correctly
+Classification matched correctly
+55   I struggle to separate reality from my imagination., ['schizophrenia', '', ''] : depression
+Presence or absence of disorder detected correctly
+56   I feel like there's no point in anything anymore., ['extreme', 'depression', ''] : depression
+Presence or absence of disorder detected correctly
+Classification matched correctly
+57   I sometimes think about hurting myself., ['extreme', 'depression', ''] : extreme
+Presence or absence of disorder detected correctly
+Classification matched correctly
+58   The world would be better off without me., ['extreme', 'loneliness', 'depression'] : extreme
+Presence or absence of disorder detected correctly
+Classification matched correctly
+59   I hear voices telling me to do dangerous things., ['extreme', 'schizophrenia', ''] : depression
+Presence or absence of disorder detected correctly
+60   I have violent thoughts that scare me., ['extreme', 'bipolar disorder', ''] : anxiety
+Presence or absence of disorder detected correctly
+61   Oh well, it could have been worse, ['normal', '', ''] : depression
+62   I sometimes stare at my room for hours, ['emotional', '', ''] : emotional
+Presence or absence of disorder detected correctly
+Classification matched correctly
+Accuracy of classification = 69.35483870967742
+Accuracy of finding disorder = 98.38709677419355
