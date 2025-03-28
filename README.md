@@ -32,6 +32,7 @@ The platform's **UI is designed with real feedback** from **IIT Patna students**
 https://huggingface.co/victunes/TherapyBeagle-11B-v2-GGUF
 
 ## 💡 **Smart Inferencing System for Detecting Potential Disorders**  
+![Inferencer Flowchart](Flowcharts/inferencer-flowchart.png)
 
 ### ⚙️ **How It Works**  
 ✅ The inferencing system **analyzes each user message** to detect potential mental health issues.  
@@ -61,6 +62,7 @@ https://huggingface.co/victunes/TherapyBeagle-11B-v2-GGUF
 - **LLaMA 3.1**  
 
 ## 🎯 Profile Generation Pipeline
+![Profile Generation Pipeline](Flowcharts/profiler-flowchart.png)
 
 We implement a precise yet efficient user profiling system for the therapeutic chatbot, utilizing a unique citation generation mechanism.
 
