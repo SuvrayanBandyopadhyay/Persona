@@ -7,7 +7,7 @@ from langchain_core.messages import SystemMessage
 
 from mysql_wrapper import *
 
-def update_session_state(cursor, user):
+def update_session_state(user):
     st.session_state.state = 'init'
     st.session_state.user = user
 
@@ -78,7 +78,7 @@ def sign_up_ui():
             user = cursor.fetchone()
             conn.commit()
 
-            update_session_state(cursor, user)
+            update_session_state(user)
             st.success("Sign-up successful!")
             time.sleep(2)
             st.rerun()
@@ -105,7 +105,7 @@ def sign_in_ui():
                 user['passHash'],
                 hashlib.sha256(password.encode()).hexdigest()
             ):
-                update_session_state(cursor, user)
+                update_session_state(user)
                 st.success("Sign-in successful!")
                 time.sleep(2)
                 st.rerun()

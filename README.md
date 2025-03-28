@@ -74,15 +74,15 @@ We implement a precise yet efficient user profiling system for the therapeutic c
 
 ✅ Implements a unique citation generation mechanism that employs semantic similarity scores to propagate citations across profile updates over time
 
-### 💡 Two-Phase Citation Generation Mechanism:
+### 💡 Two-Phase Workflow:
 1. Summarizer Agent:
 
    ✅ Employs a ChatOllama model to summarize user messages while augmenting them with the existing profile
    
    ✅ Generates concise, non-repetitive summaries of all user information till-date
-   
 
-2. Cosine Similarity (using ChromaDB):
+
+2. Citations Using Semantic Similarity:
 
    ✅ Uses HuggingFace embeddings for semantic similarity scoring
    
