@@ -68,13 +68,13 @@ https://huggingface.co/victunes/TherapyBeagle-11B-v2-GGUF
 We implement a precise yet efficient user profiling system for the therapeutic chatbot, utilizing a unique citation generation mechanism.
 
 ### 🚀 Key Features:
-✅ Retrieves unprofiled user messages from the MySQL database
+✅ Automatically fetches unprofiled user messages from the chat database
 
 ✅ Updates existing user profiles with information from unprocessed messages using a summarization agent (LLM)
 
 ✅ Implements a unique citation generation mechanism that employs semantic similarity scores to propagate citations across profile updates over time
 
-### 💡 Citation Generation Mechanism:
+### 💡 Two-Phase Citation Generation Mechanism:
 1. Summarizer Agent:
 
    ✅ Employs a ChatOllama model to summarize user messages while augmenting them with the existing profile
@@ -82,11 +82,11 @@ We implement a precise yet efficient user profiling system for the therapeutic c
    ✅ Generates concise, non-repetitive summaries of all user information till-date
    
 
-3. Cosine Similarity (using ChromaDB):
+2. Cosine Similarity (using ChromaDB):
 
-   ✅ Uses HuggingFace embeddings (sentence-transformers/all-mpnet-base-v2) for semantic similarity scoring
+   ✅ Uses HuggingFace embeddings for semantic similarity scoring
    
-   ✅ Stores embeddings from both the persistent profile, and the unprofiled messages in in-memory ChromaDB collections for efficient querying
+   ✅ Stores embeddings from the persistent profile, and the newly-profiled messages into a combined in-memory ChromaDB collection for efficient querying
    
    ✅ Propagates chat message citations by finding the most similar messages to each profile point
    
