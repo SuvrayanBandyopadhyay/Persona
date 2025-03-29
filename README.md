@@ -43,7 +43,7 @@ https://huggingface.co/victunes/TherapyBeagle-11B-v2-GGUF
 ### ⚙️ **How It Works**  
 ✅ The inferencing system **analyzes each user message** to detect potential mental health issues.  
 ✅ Utilizes a **bi-agent system** to enhance prediction accuracy.  
-✅ The platform can **classify each message** into one of the following categories:  
+✅ The program can **classify each message** into one of the following categories:  
    - **Normal**  
    - **Eating Disorders**  
    - **Addiction**  
