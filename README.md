@@ -1,3 +1,8 @@
+
+<p align="center">
+  <img width="570" alt="images" src="https://github.com/user-attachments/assets/2ee7ddc6-6e99-401b-ae06-23966e0f7e58" />
+</p>
+
 # 🌿 **Persona**  
 An interactive AI-powered mental wellness platform built by **Team Draco 🐉** for the **"PersonaBot: AI-Driven User Profiling"** problem statement at **ICTC 3.0**.  
 
@@ -127,8 +132,8 @@ Displays **real-time visualizations** of the individual’s **mental health tren
 ## 📈 Results
 ### Message Inferencer Accuracy
 
-**Accuracy of classification =  69.35%**
+✅**Accuracy of classification =  69.35%**
 
-**Accuracy of finding whether disorder is present or not = 98.387%**
+✅**Accuracy of finding whether disorder is present or not = 98.387%**
 
 
