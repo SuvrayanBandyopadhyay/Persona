@@ -1,3 +1,8 @@
+
+<p align="center">
+  <img width="570" alt="images" src="https://github.com/user-attachments/assets/2ee7ddc6-6e99-401b-ae06-23966e0f7e58" />
+</p>
+
 # 🌿 **Persona**  
 An interactive AI-powered mental wellness platform built by **Team Draco 🐉** for the **"PersonaBot: AI-Driven User Profiling"** problem statement at **ICTC 3.0**.  
 
@@ -26,7 +31,8 @@ Users can access **voice-over support** and connect with professional counselors
 The platform's **UI is designed with real feedback** from **IIT Patna students**, ensuring a seamless and user-friendly experience tailored to their needs.  
 
    
-<img width="959" alt="image" src="https://github.com/user-attachments/assets/c71fd11b-cf13-44f5-82a2-7dc430e5230b" />
+![image](https://github.com/user-attachments/assets/3542017e-a028-41fa-820c-00f8af60a34c)
+
 
 ### **Model Used** 
 https://huggingface.co/victunes/TherapyBeagle-11B-v2-GGUF
@@ -37,7 +43,7 @@ https://huggingface.co/victunes/TherapyBeagle-11B-v2-GGUF
 ### ⚙️ **How It Works**  
 ✅ The inferencing system **analyzes each user message** to detect potential mental health issues.  
 ✅ Utilizes a **bi-agent system** to enhance prediction accuracy.  
-✅ The platform can **classify each message** into one of the following categories:  
+✅ The program can **classify each message** into one of the following categories:  
    - **Normal**  
    - **Eating Disorders**  
    - **Addiction**  
@@ -67,25 +73,25 @@ https://huggingface.co/victunes/TherapyBeagle-11B-v2-GGUF
 We implement a precise yet efficient user profiling system for the therapeutic chatbot, utilizing a unique citation generation mechanism.
 
 ### 🚀 Key Features:
-✅ Retrieves unprofiled user messages from the MySQL database
+✅ Automatically fetches unprofiled user messages from the chat database
 
 ✅ Updates existing user profiles with information from unprocessed messages using a summarization agent (LLM)
 
 ✅ Implements a unique citation generation mechanism that employs semantic similarity scores to propagate citations across profile updates over time
 
-### 💡 Citation Generation Mechanism:
+### 💡 Two-Phase Workflow:
 1. Summarizer Agent:
 
    ✅ Employs a ChatOllama model to summarize user messages while augmenting them with the existing profile
    
    ✅ Generates concise, non-repetitive summaries of all user information till-date
-   
 
-3. Cosine Similarity (using ChromaDB):
 
-   ✅ Uses HuggingFace embeddings (sentence-transformers/all-mpnet-base-v2) for semantic similarity scoring
+2. Citations Using Semantic Similarity:
+
+   ✅ Uses HuggingFace embeddings for semantic similarity scoring
    
-   ✅ Stores embeddings from both the persistent profile, and the unprofiled messages in in-memory ChromaDB collections for efficient querying
+   ✅ Stores embeddings from the persistent profile, and the newly-profiled messages into a combined in-memory ChromaDB collection for efficient querying
    
    ✅ Propagates chat message citations by finding the most similar messages to each profile point
    
@@ -126,8 +132,8 @@ Displays **real-time visualizations** of the individual’s **mental health tren
 ## 📈 Results
 ### Message Inferencer Accuracy
 
-**Accuracy of classification =  69.35%**
+✅**Accuracy of classification =  69.35%**
 
-**Accuracy of finding whether disorder is present or not = 98.387%**
+✅**Accuracy of finding whether disorder is present or not = 98.387%**
 
 
