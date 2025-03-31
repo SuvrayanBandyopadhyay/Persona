@@ -113,7 +113,7 @@ Classification matched correctly
 42   I feel like I have no real friends., ['loneliness', '', ''] : loneliness
 Presence or absence of disorder detected correctly
 Classification matched correctly
-43   Even in a crowded room, ['i feel alone.', 'loneliness', 'anxiety'] : anxiety
+43   Even in a crowded room i feel alone., [, 'loneliness', 'anxiety'] : anxiety
 Presence or absence of disorder detected correctly
 Classification matched correctly
 44   I haven't talked to anyone in days., ['loneliness', 'depression', ''] : loneliness
